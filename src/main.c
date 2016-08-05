@@ -23,6 +23,8 @@ void delay(uint16_t delay);
 #define BUTTONS_PORT GPIOA
 #define BUTTONS_PIN GPIO_PIN_0
 
+uint8_t rotacion;
+
 int main(void) {
 
 	__GPIOD_CLK_ENABLE();
@@ -48,7 +50,9 @@ int main(void) {
 
 
 	while (1) {
-
+		if (HAL_GPIO_ReadPin(BUTTONS_PORT, BUTTONS_PIN)){
+			rotacion ^= 1;
+		}
 
 		HAL_GPIO_WritePin(LEDS_PORT, LED_AZUL, GPIO_PIN_RESET);
 		HAL_GPIO_WritePin(LEDS_PORT, LED_ROJO, GPIO_PIN_RESET);
@@ -56,7 +60,7 @@ int main(void) {
 		HAL_GPIO_WritePin(LEDS_PORT, LED_VERDE, GPIO_PIN_RESET);
 
 
-		if (HAL_GPIO_ReadPin(BUTTONS_PORT, BUTTONS_PIN) == 0) {
+		if (rotacion) {
 			HAL_GPIO_WritePin(LEDS_PORT, LED_AZUL, GPIO_PIN_SET);
 			HAL_GPIO_WritePin(LEDS_PORT, LED_ROJO, GPIO_PIN_RESET);
 			HAL_GPIO_WritePin(LEDS_PORT, LED_NARANJA, GPIO_PIN_RESET);
